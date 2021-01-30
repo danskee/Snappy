@@ -24,8 +24,8 @@ using System.Media;
 using System.Drawing;
 using System.Diagnostics;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace Snappy
 {
@@ -49,6 +49,7 @@ namespace Snappy
         public bool LeftButtonDown = false;
         public bool RectangleDrawn = false;
         Pen MyPen = new Pen(Color.Black, 1);
+        public bool startedminimized = false;
         public Point ClickPoint = new Point();
         public int RectangleWidth = new int();
         public bool CopyScreenshotsToClipboard;
@@ -104,7 +105,7 @@ namespace Snappy
 
         private void CropForm_MouseMove(object sender, MouseEventArgs e)
         {
-            if (LeftButtonDown)
+            if (LeftButtonDown && !RectangleDrawn)
             {
                 if (Cursor.Position.X < ClickPoint.X)
                 {
@@ -174,7 +175,7 @@ namespace Snappy
                 if (CopyScreenshotsToClipboard == true)
                 {
                     Clipboard.SetImage(ss);
-					camerasound.Play();
+                    camerasound.Play();
                 }
                 else if (CopyScreenshotsToClipboard == false)
                 {
@@ -191,8 +192,12 @@ namespace Snappy
 
                 this.Close();
                 Timer.Enabled = false;
-                MainForm MainForm = (MainForm)Application.OpenForms["MainForm"];
-                MainForm.Maximize();
+
+                if (startedminimized == false)
+                {
+                    MainForm MainForm = (MainForm)Application.OpenForms["MainForm"];
+                    MainForm.Maximize();
+                }
             }
         }
 

@@ -55,6 +55,7 @@ namespace Snappy
         public Rectangle bounds;
         private bool allowVisible;
         public SoundPlayer camerasound;
+        public bool startedminimized = false;
         public bool CaptureMouseCursor = false;
         public bool CopyScreenshotsToClipboard;
         private const Int32 DI_NORMAL = 0x0003;
@@ -254,6 +255,7 @@ namespace Snappy
                 if (Settings.GetValue("StartMinimized").ToString() == "True")
                 {
                     Minimize();
+                    startedminimized = true;
                     CheckBoxStartMinimized.Checked = true;
                 }
                 else if (Settings.GetValue("StartMinimized").ToString() == "False")
@@ -753,6 +755,15 @@ namespace Snappy
                     else if (CopyScreenshotsToClipboard == false)
                     {
                         CropForm.CopyScreenshotsToClipboard = false;
+                    }
+
+                    if (startedminimized == true)
+                    {
+                        CropForm.startedminimized = true;
+                    }
+                    else if (startedminimized == false)
+                    {
+                        CropForm.startedminimized = false;
                     }
 
                     CropForm.outputpath = TextBoxOutputPath.Text;
