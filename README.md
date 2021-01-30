@@ -1,5 +1,5 @@
 # Snappy
-A lightweight utility for capturing screenshots for Windows.
+![Snappy](https://cdn.discordapp.com/attachments/759162962325143623/805193576275378226/unknown.png)
 
 ## Description
 A lightweight utility for capturing screenshots for Windows. It stores settings in registry in the following path: "HKEY_CURRENT_USER\Software\Snappy".
