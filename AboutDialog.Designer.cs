@@ -95,7 +95,7 @@ namespace Snappy
             this.Info.Name = "Info";
             this.Info.Size = new System.Drawing.Size(136, 65);
             this.Info.TabIndex = 0;
-            this.Info.Text = "Snappy\r\nVersion 1.0.0\r\n\r\nCopyright 2021 Danske\r\nunder GNU GPL v3 license";
+            this.Info.Text = "Snappy\r\nVersion 1.0.1\r\n\r\nCopyright 2021 Danske\r\nunder GNU GPL v3 license";
             this.Info.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // LinkGitHub

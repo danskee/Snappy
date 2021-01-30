@@ -575,6 +575,47 @@ namespace Snappy
             Minimize();
         }
 
+        private void ButtonResetSettings_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to reset all of the settings?", "Memory Cleaner", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                CheckBox1.Checked = true;
+                Hotkey1.Enabled = true;
+                Hotkey1.Text = "Control + F5";
+                Settings.SetValue("Hotkey1", "Control + F5", RegistryValueKind.String);
+                Settings.SetValue("Hotkey1Enabled", "True", RegistryValueKind.String);
+
+                CheckBox2.Checked = true;
+                Hotkey2.Enabled = true;
+                Hotkey2.Text = "Control + F6";
+                Settings.SetValue("Hotkey2", "Control + F6", RegistryValueKind.String);
+                Settings.SetValue("Hotkey2Enabled", "True", RegistryValueKind.String);
+
+                CheckBox3.Checked = true;
+                Hotkey3.Enabled = true;
+                Hotkey3.Text = "Control + F7";
+                Settings.SetValue("Hotkey3", "Control + F7", RegistryValueKind.String);
+                Settings.SetValue("Hotkey3Enabled", "True", RegistryValueKind.String);
+
+                CheckBoxCaptureMouseCursor.Checked = false;
+                Settings.SetValue("CaptureMouseCursor", "False", RegistryValueKind.String);
+
+                CheckBoxCopyScreenshotsToClipboard.Checked = true;
+                Settings.SetValue("CopyScreenshotsToClipboard", "True", RegistryValueKind.String);
+
+                TextBoxOutputPath.Enabled = false;
+                Settings.SetValue("OutputPath", "C:\\", RegistryValueKind.String);
+
+                ButtonBrowse.Enabled = false;
+
+                CheckBoxStartMinimized.Checked = false;
+                Settings.SetValue("StartMinimized", "False", RegistryValueKind.String);
+
+                CheckBoxStartSnappyOnSystemStartup.Checked = false;
+                Settings.SetValue("StartSnappyOnSystemStartup", "False", RegistryValueKind.String);
+            }
+        }
+
         protected override void SetVisibleCore(bool value)
         {
             if (!allowVisible)

@@ -66,6 +66,7 @@ namespace Snappy
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.MainMenuHelp = new System.Windows.Forms.MenuItem();
             this.MainMenu = new System.Windows.Forms.MainMenu(this.components);
+            this.ButtonResetSettings = new System.Windows.Forms.Button();
             this.GroupBoxHotkeySettings.SuspendLayout();
             this.GroupBoxMiscSettings.SuspendLayout();
             this.ContextMenuStrip.SuspendLayout();
@@ -291,9 +292,9 @@ namespace Snappy
             // ButtonMinimizeSnappyToSystemTray
             // 
             this.ButtonMinimizeSnappyToSystemTray.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonMinimizeSnappyToSystemTray.Location = new System.Drawing.Point(12, 282);
+            this.ButtonMinimizeSnappyToSystemTray.Location = new System.Drawing.Point(13, 281);
             this.ButtonMinimizeSnappyToSystemTray.Name = "ButtonMinimizeSnappyToSystemTray";
-            this.ButtonMinimizeSnappyToSystemTray.Size = new System.Drawing.Size(486, 23);
+            this.ButtonMinimizeSnappyToSystemTray.Size = new System.Drawing.Size(389, 23);
             this.ButtonMinimizeSnappyToSystemTray.TabIndex = 9;
             this.ButtonMinimizeSnappyToSystemTray.Text = "Minimize Snappy to system tray";
             this.ButtonMinimizeSnappyToSystemTray.UseVisualStyleBackColor = true;
@@ -337,11 +338,23 @@ namespace Snappy
             this.MainMenuFile,
             this.MainMenuHelp});
             // 
+            // ButtonResetSettings
+            // 
+            this.ButtonResetSettings.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.ButtonResetSettings.Location = new System.Drawing.Point(408, 281);
+            this.ButtonResetSettings.Name = "ButtonResetSettings";
+            this.ButtonResetSettings.Size = new System.Drawing.Size(90, 23);
+            this.ButtonResetSettings.TabIndex = 10;
+            this.ButtonResetSettings.Text = "Reset settings";
+            this.ButtonResetSettings.UseVisualStyleBackColor = true;
+            this.ButtonResetSettings.Click += new System.EventHandler(this.ButtonResetSettings_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(511, 317);
+            this.Controls.Add(this.ButtonResetSettings);
             this.Controls.Add(this.ButtonMinimizeSnappyToSystemTray);
             this.Controls.Add(this.GroupBoxScreenshotSettings);
             this.Controls.Add(this.GroupBoxMiscSettings);
@@ -394,6 +407,7 @@ namespace Snappy
         private System.Windows.Forms.MenuItem menuItem2;
         private System.Windows.Forms.MenuItem MainMenuHelp;
         private System.Windows.Forms.MainMenu MainMenu;
+        private System.Windows.Forms.Button ButtonResetSettings;
     }
 }
 
