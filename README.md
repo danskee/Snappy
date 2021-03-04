@@ -1,5 +1,5 @@
 # Snappy
-![Snappy](https://cdn.discordapp.com/attachments/759162962325143623/805392882919931904/unknown.png)
+![Snappy](https://github.com/danskee/Snappy/blob/main/screenshot.png)
 
 ## Description
 A lightweight utility for capturing screenshots for Windows. It stores settings in registry in the following path: "HKEY_CURRENT_USER\Software\Snappy".
