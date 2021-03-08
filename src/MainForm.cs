@@ -29,7 +29,7 @@ using System.Windows.Forms;
 using System.IO.Compression;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-
+using System.Linq;
 
 namespace Snappy
 {
@@ -67,7 +67,7 @@ namespace Snappy
         public bool CopyScreenshotsToClipboard;
         private const Int32 DI_NORMAL = 0x0003;
         private const Int32 CURSOR_SHOWING = 0x0001;
-        AboutDialog AboutDialog = new AboutDialog("1.0.4");
+        AboutDialog AboutDialog = new AboutDialog("1.0.5");
         LicenseAgreementDialog LicenseAgreementDialog = new LicenseAgreementDialog();
         public RegistryKey Settings = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Snappy", true);
         public RegistryKey Startup = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
@@ -126,93 +126,6 @@ namespace Snappy
             else
             {
                 checkforupdates();
-            }
-
-            // Hotkey1
-            if (Settings.GetValue("Hotkey1") != null)
-            {
-                Hotkey1.Text = Settings.GetValue("Hotkey1").ToString();
-            }
-            else
-            {
-                Settings.SetValue("Hotkey1", "Control + F5", RegistryValueKind.String);
-            }
-
-            // Hotkey2
-            if (Settings.GetValue("Hotkey2") != null)
-            {
-                Hotkey2.Text = Settings.GetValue("Hotkey2").ToString();
-            }
-            else
-            {
-                Settings.SetValue("Hotkey2", "Control + F6", RegistryValueKind.String);
-            }
-
-            // Hotkey3
-            if (Settings.GetValue("Hotkey3") != null)
-            {
-                Hotkey3.Text = Settings.GetValue("Hotkey3").ToString();
-            }
-            else
-            {
-                Settings.SetValue("Hotkey3", "Control + F7", RegistryValueKind.String);
-            }
-
-            // Hotkey1Enabled
-            if (Settings.GetValue("Hotkey1Enabled") != null)
-            {
-                if (Settings.GetValue("Hotkey1Enabled").ToString() == "True")
-                {
-                    CheckBox1.Checked = true;
-                    Hotkey1.Enabled = true;
-                }
-                else if (Settings.GetValue("Hotkey1Enabled").ToString() == "False")
-                {
-                    CheckBox1.Checked = false;
-                    Hotkey1.Enabled = false;
-                }
-            }
-            else
-            {
-                Settings.SetValue("Hotkey1Enabled", "True", RegistryValueKind.String);
-            }
-
-            // Hotkey2Enabled
-            if (Settings.GetValue("Hotkey2Enabled") != null)
-            {
-                if (Settings.GetValue("Hotkey2Enabled").ToString() == "True")
-                {
-                    CheckBox2.Checked = true;
-                    Hotkey2.Enabled = true;
-                }
-                else if (Settings.GetValue("Hotkey2Enabled").ToString() == "False")
-                {
-                    CheckBox2.Checked = false;
-                    Hotkey2.Enabled = false;
-                }
-            }
-            else
-            {
-                Settings.SetValue("Hotkey2Enabled", "True", RegistryValueKind.String);
-            }
-
-            // Hotkey3Enabled
-            if (Settings.GetValue("Hotkey3Enabled") != null)
-            {
-                if (Settings.GetValue("Hotkey3Enabled").ToString() == "True")
-                {
-                    CheckBox3.Checked = true;
-                    Hotkey3.Enabled = true;
-                }
-                else if (Settings.GetValue("Hotkey3Enabled").ToString() == "False")
-                {
-                    CheckBox3.Checked = false;
-                    Hotkey3.Enabled = false;
-                }
-            }
-            else
-            {
-                Settings.SetValue("Hotkey3Enabled", "True", RegistryValueKind.String);
             }
 
             // Capture mouse cursor
@@ -328,7 +241,40 @@ namespace Snappy
                 Settings.SetValue("StartSnappyOnSystemStartup", "False", RegistryValueKind.String);
             }
 
-            RegisterHotkey();
+            for (int i = 1; i < 4; i++)
+            {
+                TextBox textboxhk = Controls.Find("Hotkey" + i, true).FirstOrDefault() as TextBox;
+                CheckBox chkbox = Controls.Find("CheckBox" + i, true).FirstOrDefault() as CheckBox;
+
+                if (Settings.GetValue("Hotkey" + i) != null)
+                {
+                    textboxhk.Text = Settings.GetValue("Hotkey" + i).ToString();
+                }
+                else
+                {
+                    Settings.SetValue("Hotkey" + i, "Control + F5", RegistryValueKind.String);
+                }
+
+                if (Settings.GetValue("Hotkey" + i + "Enabled") != null)
+                {
+                    if (Settings.GetValue("Hotkey" + i + "Enabled").ToString() == "True")
+                    {
+                        chkbox.Checked = true;
+                        textboxhk.Enabled = true;
+                    }
+                    else if (Settings.GetValue("Hotkey" + i + "Enabled").ToString() == "False")
+                    {
+                        chkbox.Checked = false;
+                        textboxhk.Enabled = false;
+                    }
+                }
+                else
+                {
+                    Settings.SetValue("Hotkey" + i + "Enabled", "True", RegistryValueKind.String);
+                }
+
+                RegisterHotkeys(textboxhk, i);
+            }
         }
 
         private void MenuItemExit_Click(object sender, EventArgs e)
@@ -363,185 +309,32 @@ namespace Snappy
 
         private void Hotkey1_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (Control.ModifierKeys)
-            {
-                case Keys.Shift:
-                    if (e.KeyCode.ToString() == "ShiftKey")
-                    {
-                    }
-                    else
-                    {
-                        Hotkey1.Text = "Shift + " + e.KeyCode.ToString();
-                    }
-                    break;
-
-                case Keys.Control:
-                    if (e.KeyCode.ToString() == "ControlKey")
-                    {
-                    }
-                    else
-                    {
-                        Hotkey1.Text = "Control + " + e.KeyCode.ToString();
-                    }
-                    break;
-
-                case Keys.Alt:
-                    if (e.KeyCode.ToString() == "Menu")
-                    {
-                    }
-                    else
-                    {
-                        Hotkey1.Text = "Alt + " + e.KeyCode.ToString();
-                    }
-                    break;
-
-                default:
-                    Hotkey1.Text = e.KeyCode.ToString();
-                    break;
-            }
-
-            Settings.SetValue("Hotkey1", Hotkey1.Text, RegistryValueKind.String);
-            RegisterHotkey();
+            RegisterHotkey(Hotkey1, 1, e);
         }
 
         private void Hotkey2_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (Control.ModifierKeys)
-            {
-                case Keys.Shift:
-                    if (e.KeyCode.ToString() == "ShiftKey")
-                    {
-                    }
-                    else
-                    {
-                        Hotkey2.Text = "Shift + " + e.KeyCode.ToString();
-                    }
-                    break;
-
-                case Keys.Control:
-                    if (e.KeyCode.ToString() == "ControlKey")
-                    {
-                    }
-                    else
-                    {
-                        Hotkey2.Text = "Control + " + e.KeyCode.ToString();
-                    }
-                    break;
-
-                case Keys.Alt:
-                    if (e.KeyCode.ToString() == "Menu")
-                    {
-                    }
-                    else
-                    {
-                        Hotkey2.Text = "Alt + " + e.KeyCode.ToString();
-                    }
-                    break;
-
-                default:
-                    Hotkey2.Text = e.KeyCode.ToString();
-                    break;
-            }
-
-            Settings.SetValue("Hotkey2", Hotkey2.Text, RegistryValueKind.String);
-            RegisterHotkey();
+            RegisterHotkey(Hotkey2, 2, e);
         }
 
         private void Hotkey3_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (Control.ModifierKeys)
-            {
-                case Keys.Shift:
-                    if (e.KeyCode.ToString() == "ShiftKey")
-                    {
-                    }
-                    else
-                    {
-                        Hotkey3.Text = "Shift + " + e.KeyCode.ToString();
-                    }
-                    break;
-
-                case Keys.Control:
-                    if (e.KeyCode.ToString() == "ControlKey")
-                    {
-                    }
-                    else
-                    {
-                        Hotkey3.Text = "Control + " + e.KeyCode.ToString();
-                    }
-                    break;
-
-                case Keys.Alt:
-                    if (e.KeyCode.ToString() == "Menu")
-                    {
-                    }
-                    else
-                    {
-                        Hotkey3.Text = "Alt + " + e.KeyCode.ToString();
-                    }
-                    break;
-
-                default:
-                    Hotkey3.Text = e.KeyCode.ToString();
-                    break;
-            }
-
-            Settings.SetValue("Hotkey3", Hotkey3.Text, RegistryValueKind.String);
-            RegisterHotkey();
+            RegisterHotkey(Hotkey3, 3, e);
         }
 
         private void CheckBox1_CheckedChanged(object sender, EventArgs e)
         {
-            switch (CheckBox1.Checked)
-            {
-                case true:
-                    Settings.SetValue("Hotkey1Enabled", "True", RegistryValueKind.String);
-                    Hotkey1.Enabled = true;
-                    RegisterHotkey();
-                    break;
-
-                case false:
-                    Settings.SetValue("Hotkey1Enabled", "False", RegistryValueKind.String);
-                    Hotkey1.Enabled = false;
-                    UnregisterHotKey(this.Handle, 1);
-                    break;
-            }
+            DisableEnableHotkey(CheckBox1.Checked, 1);
         }
 
         private void CheckBox2_CheckedChanged(object sender, EventArgs e)
         {
-            switch (CheckBox2.Checked)
-            {
-                case true:
-                    Settings.SetValue("Hotkey2Enabled", "True", RegistryValueKind.String);
-                    Hotkey2.Enabled = true;
-                    RegisterHotkey();
-                    break;
-
-                case false:
-                    Settings.SetValue("Hotkey2Enabled", "False", RegistryValueKind.String);
-                    Hotkey2.Enabled = false;
-                    UnregisterHotKey(this.Handle, 2);
-                    break;
-            }
+            DisableEnableHotkey(CheckBox2.Checked, 2);
         }
 
         private void CheckBox3_CheckedChanged(object sender, EventArgs e)
         {
-            switch (CheckBox3.Checked)
-            {
-                case true:
-                    Settings.SetValue("Hotkey3Enabled", "True", RegistryValueKind.String);
-                    Hotkey3.Enabled = true;
-                    RegisterHotkey();
-                    break;
-
-                case false:
-                    Settings.SetValue("Hotkey3Enabled", "False", RegistryValueKind.String);
-                    Hotkey3.Enabled = false;
-                    UnregisterHotKey(this.Handle, 3);
-                    break;
-            }
+            DisableEnableHotkey(CheckBox3.Checked, 3);
         }
 
         private void CheckBoxCaptureMouseCursor_CheckedChanged(object sender, EventArgs e)
@@ -692,6 +485,7 @@ namespace Snappy
 
                     CheckBoxStartSnappyOnSystemStartup.Checked = false;
                     Settings.SetValue("StartSnappyOnSystemStartup", "False", RegistryValueKind.String);
+
                     break;
             }
         }
@@ -724,86 +518,101 @@ namespace Snappy
             }
         }
 
-        void RegisterHotkey()
+        private void RegisterHotkey(TextBox textbox, int id, KeyEventArgs e)
+        {
+            switch (Control.ModifierKeys)
+            {
+                case Keys.Shift:
+                    if (e.KeyCode.ToString() == "ShiftKey")
+                    {
+                    }
+                    else
+                    {
+                        UnregisterHotKey(this.Handle, id);
+                        RegisterHotKey(this.Handle, id, (int)4, e.KeyCode.GetHashCode());
+                        textbox.Text = "Shift + " + e.KeyCode.ToString();
+                    }
+                    break;
+
+                case Keys.Control:
+                    if (e.KeyCode.ToString() == "ControlKey")
+                    {
+                    }
+                    else
+                    {
+                        UnregisterHotKey(this.Handle, id);
+                        RegisterHotKey(this.Handle, id, (int)2, e.KeyCode.GetHashCode());
+                        textbox.Text = "Control + " + e.KeyCode.ToString();
+                    }
+                    break;
+
+                case Keys.Alt:
+                    if (e.KeyCode.ToString() == "Menu")
+                    {
+                    }
+                    else
+                    {
+                        UnregisterHotKey(this.Handle, id);
+                        RegisterHotKey(this.Handle, id, (int)1, e.KeyCode.GetHashCode());
+                        textbox.Text = "Alt + " + e.KeyCode.ToString();
+                    }
+                    break;
+
+                default:
+                    UnregisterHotKey(this.Handle, id);
+                    RegisterHotKey(this.Handle, id, (int)0, e.KeyCode.GetHashCode());
+                    textbox.Text = e.KeyCode.ToString();
+                    break;
+            }
+
+            Settings.SetValue("Hotkey" + id, textbox.Text, RegistryValueKind.String);
+        }
+
+        private void DisableEnableHotkey(bool enabled, int id)
+        {
+            TextBox textboxhk = Controls.Find("Hotkey" + id, true).FirstOrDefault() as TextBox;
+
+            switch (enabled)
+            {
+                case true:
+                    textboxhk.Enabled = true;
+                    Settings.SetValue("Hotkey" + id + "Enabled", "True", RegistryValueKind.String);
+                    RegisterHotkeys(textboxhk, id);
+                    break;
+
+                case false:
+                    textboxhk.Enabled = false;
+                    Settings.SetValue("Hotkey" + id + "Enabled", "False", RegistryValueKind.String);
+                    UnregisterHotKey(this.Handle, id);
+                    break;
+            }
+        }
+
+        private void RegisterHotkeys(TextBox textbox, int id)
         {
             Keys a;
 
-            // Hotkey1
-            {
-                Enum.TryParse(Hotkey1.Text.Replace("Shift + ", "").Replace("Control + ", "").Replace("Alt + ", ""), out a);
+            Enum.TryParse(textbox.Text.Replace("Shift + ", "").Replace("Control + ", "").Replace("Alt + ", ""), out a);
 
-                if (Hotkey1.Text.Contains("Shift"))
-                {
-                    UnregisterHotKey(this.Handle, 1);
-                    RegisterHotKey(this.Handle, 1, (int)4, a.GetHashCode());
-                }
-                else if (Hotkey1.Text.Contains("Control"))
-                {
-                    UnregisterHotKey(this.Handle, 1);
-                    RegisterHotKey(this.Handle, 1, (int)2, a.GetHashCode());
-                }
-                else if (Hotkey1.Text.Contains("Alt"))
-                {
-                    UnregisterHotKey(this.Handle, 1);
-                    RegisterHotKey(this.Handle, 1, (int)1, a.GetHashCode());
-                }
-                else
-                {
-                    UnregisterHotKey(this.Handle, 1);
-                    RegisterHotKey(this.Handle, 1, (int)0, a.GetHashCode());
-                }
+            if (textbox.Text.Contains("Shift"))
+            {
+                UnregisterHotKey(this.Handle, id);
+                RegisterHotKey(this.Handle, id, (int)4, a.GetHashCode());
             }
-
-            // Hotkey 2
+            else if (textbox.Text.Contains("Control"))
             {
-                Enum.TryParse(Hotkey2.Text.Replace("Shift + ", "").Replace("Control + ", "").Replace("Alt + ", ""), out a);
-
-                if (Hotkey2.Text.Contains("Shift"))
-                {
-                    UnregisterHotKey(this.Handle, 2);
-                    RegisterHotKey(this.Handle, 2, (int)4, a.GetHashCode());
-                }
-                else if (Hotkey2.Text.Contains("Control"))
-                {
-                    UnregisterHotKey(this.Handle, 2);
-                    RegisterHotKey(this.Handle, 2, (int)2, a.GetHashCode());
-                }
-                else if (Hotkey2.Text.Contains("Alt"))
-                {
-                    UnregisterHotKey(this.Handle, 2);
-                    RegisterHotKey(this.Handle, 2, (int)1, a.GetHashCode());
-                }
-                else
-                {
-                    UnregisterHotKey(this.Handle, 2);
-                    RegisterHotKey(this.Handle, 2, (int)0, a.GetHashCode());
-                }
+                UnregisterHotKey(this.Handle, id);
+                RegisterHotKey(this.Handle, id, (int)2, a.GetHashCode());
             }
-
-            // Hotkey 3
+            else if (textbox.Text.Contains("Alt"))
             {
-                Enum.TryParse(Hotkey3.Text.Replace("Shift + ", "").Replace("Control + ", "").Replace("Alt + ", ""), out a);
-
-                if (Hotkey3.Text.Contains("Shift"))
-                {
-                    UnregisterHotKey(this.Handle, 3);
-                    RegisterHotKey(this.Handle, 3, (int)4, a.GetHashCode());
-                }
-                else if (Hotkey3.Text.Contains("Control"))
-                {
-                    UnregisterHotKey(this.Handle, 3);
-                    RegisterHotKey(this.Handle, 3, (int)2, a.GetHashCode());
-                }
-                else if (Hotkey3.Text.Contains("Alt"))
-                {
-                    UnregisterHotKey(this.Handle, 3);
-                    RegisterHotKey(this.Handle, 3, (int)1, a.GetHashCode());
-                }
-                else
-                {
-                    UnregisterHotKey(this.Handle, 3);
-                    RegisterHotKey(this.Handle, 3, (int)0, a.GetHashCode());
-                }
+                UnregisterHotKey(this.Handle, id);
+                RegisterHotKey(this.Handle, id, (int)1, a.GetHashCode());
+            }
+            else
+            {
+                UnregisterHotKey(this.Handle, id);
+                RegisterHotKey(this.Handle, id, (int)0, a.GetHashCode());
             }
         }
 
@@ -961,7 +770,7 @@ namespace Snappy
             }
         }
 
-        void exit()
+        private void exit()
         {
             Application.Exit();
             this.Close();
@@ -985,7 +794,7 @@ namespace Snappy
         {
             Settings.SetValue("CheckedForUpdates", "True", RegistryValueKind.String);
 
-            int currentversion = Convert.ToInt32("1.0.4".Replace(".", ""));
+            int currentversion = Convert.ToInt32("1.0.5".Replace(".", ""));
             newestver = wc.DownloadString("https://raw.githubusercontent.com/danskee/Snappy/main/version").Replace("\n", "").Replace("\r", "");
             int newestversion = Convert.ToInt32(newestver.Replace(".", ""));
 

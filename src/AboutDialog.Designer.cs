@@ -44,7 +44,6 @@ namespace Snappy
             this.LabelAbout = new System.Windows.Forms.Label();
             this.LinkGithub = new System.Windows.Forms.LinkLabel();
             this.LabelSnappy = new System.Windows.Forms.Label();
-            this.ButtonDonate = new System.Windows.Forms.Button();
             this.ButtonClose = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -107,19 +106,6 @@ namespace Snappy
             this.LabelSnappy.Text = "Snappy";
             this.LabelSnappy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // ButtonDonate
-            // 
-            this.ButtonDonate.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.ButtonDonate.AutoSize = true;
-            this.ButtonDonate.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonDonate.Location = new System.Drawing.Point(192, 88);
-            this.ButtonDonate.Name = "ButtonDonate";
-            this.ButtonDonate.Size = new System.Drawing.Size(75, 23);
-            this.ButtonDonate.TabIndex = 67;
-            this.ButtonDonate.Text = "Donate";
-            this.ButtonDonate.UseVisualStyleBackColor = true;
-            this.ButtonDonate.Click += new System.EventHandler(this.ButtonDonate_Click);
-            // 
             // ButtonClose
             // 
             this.ButtonClose.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -143,7 +129,6 @@ namespace Snappy
             this.Controls.Add(this.LabelAbout);
             this.Controls.Add(this.LinkGithub);
             this.Controls.Add(this.LabelSnappy);
-            this.Controls.Add(this.ButtonDonate);
             this.Controls.Add(this.ButtonClose);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -165,7 +150,6 @@ namespace Snappy
         private System.Windows.Forms.Label LabelAbout;
         private System.Windows.Forms.LinkLabel LinkGithub;
         private System.Windows.Forms.Label LabelSnappy;
-        private System.Windows.Forms.Button ButtonDonate;
         private System.Windows.Forms.Button ButtonClose;
     }
 }
